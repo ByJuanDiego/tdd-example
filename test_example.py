@@ -7,7 +7,7 @@ client = TestClient(app)
 
 def test_can_call_existing_endpoints_of_the_API():
     try:
-        ret = client.get("/getcoordinates/?query=Lima, Peru")
+        ret = client.get("/getcoordinates/?city=Lima, Peru")
         assert(ret is not None)
     except:
         assert False, "Exception while calling an existing function!"
@@ -15,7 +15,7 @@ def test_can_call_existing_endpoints_of_the_API():
 
 def test_cannot_call_nonexisting_endpoints_of_the_API():
     try:
-        ret = client.get("/getcoordinates/?query=blah blah")
+        ret = client.get("/getcoordinates/?city=blah blah")
         assert False, "Exception not raised"
     except:
         pass
@@ -23,7 +23,7 @@ def test_cannot_call_nonexisting_endpoints_of_the_API():
 
 def test_the_results_is_correct_for_simple_cases():
     try:
-        ret = client.get("/getcoordinates/?query=Lima, Peru")
+        ret = client.get("/getcoordinates/?city=Lima, Peru")
         ret = ret.json()
         expected = {'latitude': '-12.0621065', 'longitude': '-77.0365256'}
         assert ret == expected, "The result is not correct"
@@ -42,7 +42,7 @@ def test_the_results_is_correct_for_simple_cases():
 ])
 def test_the_result_is_correct_for_all_inputs(city_name, expected_lat, expected_lon):
     try:
-        ret = client.get(f"/getcoordinates/?query={city_name}")
+        ret = client.get(f"/getcoordinates/?city={city_name}")
         ret = ret.json()
 
         expected = {
@@ -55,3 +55,7 @@ def test_the_result_is_correct_for_all_inputs(city_name, expected_lat, expected_
 
     except:
         assert False, f"Get coordinates not working correctly for city: {city_name}"
+
+
+
+
