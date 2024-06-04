@@ -1,7 +1,13 @@
 from geopy.distance import geodesic
 import requests
+import uvicorn
+from fastapi import FastAPI
 
 
+app = FastAPI()
+
+
+@app.get("/getcoordinates/")
 def get_coordinates(query = "Lima,Perú"):
     api_url = f"https://nominatim.openstreetmap.org/search?q={query}&format=json"
     
@@ -20,6 +26,7 @@ def get_coordinates(query = "Lima,Perú"):
     }
 
 
+@app.get("/getdistance/")
 def calculate_distance(lat1: float, lon1: float, lat2: float, lon2: float):
     coordinates_point_1 = (lat1, lon1)
     coordinates_point_2 = (lat2, lon2)
@@ -27,3 +34,5 @@ def calculate_distance(lat1: float, lon1: float, lat2: float, lon2: float):
     return distance
 
 
+if __name__ == '__main__':
+    uvicorn.run(app, host="127.0.0.1", port=5000, log_level="info")
