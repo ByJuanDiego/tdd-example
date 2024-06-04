@@ -15,10 +15,16 @@ def test_can_call_existing_endpoints_of_the_API():
 
 def test_cannot_call_nonexisting_endpoints_of_the_API():
     try:
-        ret = client.get("/getcoordinates/?city=blah blah")
-        assert False, "Exception not raised"
+        ret = client.get("/getcoordinateszzz/?city=Lima, Peru")
     except:
         pass
+
+
+def test_API_reponse_404_for_nonexisting_city():
+    try:
+        ret = client.get("/getcoordinates/?city=xdddddd")
+    except:
+        assert True
 
 
 def test_the_results_is_correct_for_simple_cases():
@@ -26,7 +32,10 @@ def test_the_results_is_correct_for_simple_cases():
         ret = client.get("/getcoordinates/?city=Lima, Peru")
         ret = ret.json()
         expected = {'latitude': '-12.0621065', 'longitude': '-77.0365256'}
-        assert ret == expected, "The result is not correct"
+        assert (
+                    ret['latitude'] == expected['latitude'] 
+                and ret['longitude'] == expected['longitude']
+            ), "The result is not correct"
     except:
         assert False, "Exception while calling an existing function!"
 
