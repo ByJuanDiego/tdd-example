@@ -8,8 +8,19 @@ app = FastAPI()
 
 
 @app.get("/getcoordinates/")
-def get_coordinates(query = "Lima,Perú"):
-    api_url = f"https://nominatim.openstreetmap.org/search?q={query}&format=json"
+def get_coordinates(city = "Lima,Perú"):
+    """
+    Este endpoint obtiene las coordenadas de una ciudad pasada como query.
+    Internamente, se comunica con la API de openstreetmap para obtener las coordenadas.
+
+    input: city (la ciudad de la cual queremos las coordenadas)
+    output: dict({
+                'latitude': float(x), 
+                'longitude': float(y)
+            })
+    """
+
+    api_url = f"https://nominatim.openstreetmap.org/search?q={city}&format=json"
     
     headers = {
         'User-Agent': 'Testing App'
@@ -18,7 +29,7 @@ def get_coordinates(query = "Lima,Perú"):
     response_data = response.json()
     
     if not response_data:
-        raise Exception(f"There is no coordinate available for the city: {query}")
+        raise Exception(f"There is no coordinate available for the city: {city}")
 
     return {
         'latitude': response_data[0]['lat'],
@@ -28,6 +39,15 @@ def get_coordinates(query = "Lima,Perú"):
 
 @app.get("/getdistance/")
 def calculate_distance(lat1: float, lon1: float, lat2: float, lon2: float):
+    """
+    Este endpoint calcula la distancia geodésica entre 2 coordenadas
+
+    inputs:
+        float(lat1), float(lon1): La primera coordenada
+        float(lat2), float(lon2): La segunda coordenada
+    output:
+        float(distance): La distancia geodésica entre las 2 coordenadas
+    """
     coordinates_point_1 = (lat1, lon1)
     coordinates_point_2 = (lat2, lon2)
     distance = geodesic(coordinates_point_1, coordinates_point_2).kilometers
