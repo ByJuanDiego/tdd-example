@@ -8,7 +8,7 @@ app = FastAPI()
 
 
 @app.get("/getcoordinates/")
-def get_coordinates(city):
+def get_coordinates(city: str):
     """
     Este endpoint obtiene las coordenadas de una ciudad pasada como query.
     Internamente, se comunica con la API de openstreetmap para obtener las coordenadas.
@@ -41,4 +41,4 @@ def get_coordinates(city):
         'longitude': response_data[0]['lon']
     }
 
-# run command: uvicorn example:app
+# run command: uvicorn app:app
