@@ -81,7 +81,7 @@ def test_the_results_is_correct_for_simple_cases():
     ('Lima', '-12.0621065', '-77.0365256'),
     ('Miami', '25.7741728', '-80.19362')
 ])
-def test_the_result_is_correct_for_all_inputs(city_name, expected_lat, expected_lon):
+def test_the_result_is_correct_for_all_inputs_get_coordinates(city_name, expected_lat, expected_lon):
     try:
         ret = client.get(f"/getcoordinates/?city={city_name}")
         ret = ret.json()
@@ -114,3 +114,33 @@ def test_get_distance_is_correct_for_1_case():
     except:
         assert False, "Error while calling getdistance endpoint!"
 
+
+def test_get_distance_fails_when_calling_endpoint_with_incomplete_parameters():
+    try:
+        ret = client.get(f"/getdistance/?lat1={lat1}")
+    except:
+        assert True
+
+
+@pytest.mark.parametrize("lat1, lon1, lat2, lon2, expected_distance", [
+    (51.5074, -0.1278, 40.7128, -74.006, 5585.2335789313),
+    (51.5074, -0.1278, 48.8566, 2.3522, 343.92312009098924),
+    (51.5074, -0.1278, 35.6895, 139.6917, 9582.309507921495),
+    (51.5074, -0.1278, -12.0621065, -77.0365256, 10161.675614833683),
+    (51.5074, -0.1278, 25.7741728, -80.19362, 7138.311331337135),
+    (40.7128, -74.006, 48.8566, 2.3522, 5852.935291766765),
+    (40.7128, -74.006, 35.6895, 139.6917, 10872.799519316866),
+    (40.7128, -74.006, -12.0621065, -77.0365256, 5850.985550108614),
+    (40.7128, -74.006, 25.7741728, -80.19362, 1753.084215688838),
+    (48.8566, 2.3522, 35.6895, 139.6917, 9735.661095604704),
+    (48.8566, 2.3522, -12.0621065, -77.0365256, 10247.234015886044),
+    (48.8566, 2.3522, 25.7741728, -80.19362, 7368.963955834835),
+    (35.6895, 139.6917, -12.0621065, -77.0365256, 15500.497129820867),
+    (35.6895, 139.6917, 25.7741728, -80.19362, 12019.954199762427),
+    (-12.0621065, -77.0365256, 25.7741728, -80.19362, 4199.739527412813)
+])
+def test_the_result_is_correct_for_all_inputs_get_distance(lat1, lon1, lat2, lon2, expected_distance):
+    ret = client.get(f"/getdistance/?lat1={lat1}&lon1={lon1}&lat2={lat2}&lon2={lon2}")
+    ret = ret.json()
+
+    assert abs(ret['distance'] - expected_distance) < epsilon, "The computed distance is not correct"
