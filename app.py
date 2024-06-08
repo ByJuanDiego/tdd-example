@@ -44,6 +44,19 @@ def get_coordinates(city: str):
 
 @app.get("/getdistance/")
 def get_distance(lat1: float, lon1: float, lat2: float, lon2: float):
+    """
+    Endpoint para calcular la distancia entre 2 puntos geograficos
+
+    Input:
+        lat1 (float): Latitud del primer punto.
+        lon1 (float): Longitud del primer punto.
+        lat2 (float): Latitud del segundo punto.
+        lon2 (float): Longitud del segundo punto.
+
+    Output:
+        distance_km: La distancia geografica entre ambos puntos
+    """
+    
     coordinates1 = (lat1, lon1)
     coordinates2 = (lat2, lon2)
 
