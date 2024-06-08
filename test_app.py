@@ -25,6 +25,14 @@ client = TestClient(app)
 test_city = City(name="Lima, Peru", lat=-12.0621065, lon=-77.0365256)
 epsilon = 10e-2
 
+# Point 1
+lat1: float = 51.5074
+lon1 : float = -0.1278
+
+# Point 2
+lat2: float = 40.7128
+lon2: float = -74.0060
+
 
 #######################################################################################
 #                            Tests for get city coordinates
@@ -95,4 +103,14 @@ def test_the_result_is_correct_for_all_inputs(city_name, expected_lat, expected_
 #                            Tests for compute distance
 #######################################################################################
 
+def test_get_distance_is_correct_for_1_case():
+    try:
+        ret = client.get(f"/getdistance/?lat1={lat1}&lon1={lon1}&lat2={lat2}&lon2={lon2}")
+        ret = ret.json()
+
+        expected_distance = 5585.23357
+        assert abs(ret['distance'] - expected_distance) < epsilon, "The computed distance is not correct"
+
+    except:
+        assert False, "Error while calling getdistance endpoint!"
 

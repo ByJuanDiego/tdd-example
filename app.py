@@ -41,4 +41,15 @@ def get_coordinates(city: str):
         'longitude': response_data[0]['lon']
     }
 
-# run command: uvicorn app:app
+
+@app.get("/getdistance/")
+def get_distance(lat1: float, lon1: float, lat2: float, lon2: float):
+    coordinates1 = (lat1, lon1)
+    coordinates2 = (lat2, lon2)
+
+    distance_km = geodesic(coordinates1, coordinates2).kilometers
+    return {
+        'response': 200,
+        'message': 'Success',
+        'distance': distance_km
+    }
