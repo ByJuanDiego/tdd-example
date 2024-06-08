@@ -47,6 +47,13 @@ def get_distance(lat1: float, lon1: float, lat2: float, lon2: float):
     coordinates1 = (lat1, lon1)
     coordinates2 = (lat2, lon2)
 
+    if coordinates1 == coordinates2:
+        return {
+            'response': 200,
+            'message': 'Success',
+            'distance': 0.0
+        }
+
     distance_km = geodesic(coordinates1, coordinates2).kilometers
     return {
         'response': 200,

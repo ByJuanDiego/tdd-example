@@ -144,3 +144,11 @@ def test_the_result_is_correct_for_all_inputs_get_distance(lat1, lon1, lat2, lon
     ret = ret.json()
 
     assert abs(ret['distance'] - expected_distance) < epsilon, "The computed distance is not correct"
+
+
+
+def test_distance_of_two_equal_points_is_zero():
+    ret = client.get(f"/getdistance/?lat1={lat1}&lon1={lon1}&lat2={lat1}&lon2={lon1}")
+    ret = ret.json()
+
+    assert ret['distance'] < epsilon, "The computed distance is not correct"
